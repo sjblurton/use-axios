@@ -14,7 +14,7 @@ afterAll(() => server.close());
 describe('useAxiosGet hook status testing.', () => {
   it('should return status pending', () => {
     const { result } = renderHook(() => useAxiosGet(urls.users));
-    expect(result.current[0]).toBe('pending');
+    expect(result.current.status).toBe('pending');
   });
 
   it('should return status success', async () => {
@@ -22,7 +22,7 @@ describe('useAxiosGet hook status testing.', () => {
       useAxiosGet(urls.users)
     );
     await waitForNextUpdate();
-    expect(result.current[0]).toBe('success');
+    expect(result.current.status).toBe('success');
   });
 
   it('should return status error', async () => {
@@ -30,7 +30,7 @@ describe('useAxiosGet hook status testing.', () => {
       useAxiosGet(urls.error404)
     );
     await waitForNextUpdate();
-    expect(result.current[0]).toBe('error');
+    expect(result.current.status).toBe('error');
   });
 
   it('should return status pending after mutation.', async () => {
@@ -39,9 +39,9 @@ describe('useAxiosGet hook status testing.', () => {
     );
     await waitForNextUpdate();
     act(() => {
-      result.current[3]();
+      result.current.mutate();
     });
-    expect(result.current[0]).toBe('pending');
+    expect(result.current.status).toBe('pending');
   });
 
   it('should return status success after mutation complete.', async () => {
@@ -50,10 +50,10 @@ describe('useAxiosGet hook status testing.', () => {
     );
     await waitForNextUpdate();
     act(() => {
-      result.current[3]();
+      result.current.mutate();
     });
     await waitForNextUpdate();
-    expect(result.current[0]).toBe('success');
+    expect(result.current.status).toBe('success');
   });
 });
 
@@ -63,7 +63,7 @@ describe('useAxiosGet hook READ testing.', () => {
       useAxiosGet(urls.users)
     );
     await waitForNextUpdate();
-    expect(result.current[1]).toEqual(mockUsers);
+    expect(result.current.data).toEqual(mockUsers);
   });
 });
 
@@ -74,10 +74,10 @@ describe('useAxiosGet hook MUTATE function testing.', () => {
     );
     await waitForNextUpdate();
     act(() => {
-      result.current[3]();
+      result.current.mutate();
     });
     await waitForNextUpdate();
-    expect(result.current[1]).toEqual(mockUsers);
+    expect(result.current.data).toEqual(mockUsers);
   });
 });
 
@@ -87,20 +87,20 @@ describe('useAxiosGet ERROR messaging testing.', () => {
       useAxiosGet(urls.error404)
     );
     await waitForNextUpdate();
-    expect(result.current[2]?.isAxiosError).toBeTruthy();
+    expect(result.current.error?.isAxiosError).toBeTruthy();
   });
   it('should return an 404 error message', async () => {
     const { result, waitForNextUpdate } = renderHook(() =>
       useAxiosGet(urls.error404)
     );
     await waitForNextUpdate();
-    expect(result.current[2]?.message).toBe(errorMessages.error404);
+    expect(result.current.error?.message).toBe(errorMessages.error404);
   });
   it('should return an 500 error message', async () => {
     const { result, waitForNextUpdate } = renderHook(() =>
       useAxiosGet(urls.error500)
     );
     await waitForNextUpdate();
-    expect(result.current[2]?.message).toBe(errorMessages.error500);
+    expect(result.current.error?.message).toBe(errorMessages.error500);
   });
 });

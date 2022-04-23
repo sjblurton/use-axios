@@ -57,19 +57,19 @@ setAxiosReq({
 
 ```bash
 function App() {
-  const [todosStatus, todos, todosError, todosMutate] = useAxiosGet<MockData>(
+  const todos = useAxiosGet<MockData>(
     "https://jsonplaceholder.typicode.com/todos"
   );
 
-  if (status === "pending") return <div>loading...</div>;
-  if (status === "error") return <div>{error?.message}</div>;
+  if (todos.status === "pending") return <div>loading...</div>;
+  if (todos.status === "error") return <div>{todos?.error?.message}</div>;
 
   return (
     <div className="App">
-      {todos?.map((todo) => (
+      {todos?.data?.map((todo) => (
         <h2>{todo.title}</h2>
       ))}
-      <button onClick={mutate}>Mutate</button>
+      <button onClick={todos?.mutate}>Mutate</button>
     </div>
   );
 }
