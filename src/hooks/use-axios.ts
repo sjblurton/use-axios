@@ -1,17 +1,6 @@
-import axios, {
-  AxiosError,
-  AxiosRequestConfig,
-  AxiosResponse,
-  Method,
-} from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 import { useEffect, useState } from 'react';
-
-type Status = 'idle' | 'pending' | 'success' | 'error';
-
-interface AxiosWithMethodAndUrl<D = any> extends AxiosRequestConfig<D> {
-  url: string;
-  method: Method;
-}
+import { AxiosWithMethodAndUrl, Status } from '../interfaces';
 
 export function useAxios<D = any, T = any>(): [
   Status,
