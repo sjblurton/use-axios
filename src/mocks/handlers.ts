@@ -16,31 +16,20 @@ export const handlers = [
       ...(req.body as object),
       updatedAt: '23/04/2022',
       createdAt: '23/04/2022',
+      id: req.params.id,
     };
     return res(ctx.status(200), ctx.json(resBody));
   }),
-  // rest.post(url200, (req, res, ctx) => {
-  //   return res(
-  //     ctx.status(201),
-  //     ctx.json({ ...(req.body as {}), ...createdAt, url: req.url })
-  //   );
-  // }),
-  // rest.put(urlPut, (req, res, ctx) => {
-  //   return res(
-  //     ctx.status(200),
-  //     ctx.json({ ...(req.body as {}), ...updatedAt, url: req.url })
-  //   );
-  // }),
-  // rest.delete(urlPut, (req, res, ctx) => {
-  //   return res(ctx.status(204));
-  // }),
-  // rest.post(url404, (req, res, ctx) => {
-  //   return res(ctx.status(404));
-  // }),
-  // rest.post(url500, (req, res, ctx) => {
-  //   return res(ctx.status(500));
-  // }),
-  // rest.put(urlPut, (req, res, ctx) => {
-  //   return res(ctx.status(200), ctx.json(data));
-  // }),
+  rest.put(urls.editUser, (req, res, ctx) => {
+    const resBody = {
+      ...(req.body as object),
+      updatedAt: '23/04/2022',
+      createdAt: '12/12/2012',
+      id: 4,
+    };
+    return res(ctx.status(200), ctx.json(resBody));
+  }),
+  rest.delete(urls.editUser, (_, res, ctx) => {
+    return res(ctx.status(204));
+  }),
 ];

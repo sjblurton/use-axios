@@ -4,6 +4,12 @@ export const urls = {
   users: '/users',
   error404: '/404',
   error500: '/error500',
+  editUser: '/users/4',
+};
+
+export const errorMessages = {
+  error404: 'Request failed with status code 404',
+  error500: 'Request failed with status code 500',
 };
 
 export const mockUsers: MockUser[] = [

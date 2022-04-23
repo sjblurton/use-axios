@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react-hooks';
 import { useAxiosGet } from '../src';
-import { mockUsers, urls } from '../src/mocks/data';
+import { errorMessages, mockUsers, urls } from '../src/mocks/data';
 
 import { server } from '../src/mocks/server';
 // Establish API mocking before all tests.
@@ -94,17 +94,13 @@ describe('useAxiosGet ERROR messaging testing.', () => {
       useAxiosGet(urls.error404)
     );
     await waitForNextUpdate();
-    expect(result.current[2]?.message).toBe(
-      'Request failed with status code 404'
-    );
+    expect(result.current[2]?.message).toBe(errorMessages.error404);
   });
   it('should return an 500 error message', async () => {
     const { result, waitForNextUpdate } = renderHook(() =>
       useAxiosGet(urls.error500)
     );
     await waitForNextUpdate();
-    expect(result.current[2]?.message).toBe(
-      'Request failed with status code 500'
-    );
+    expect(result.current[2]?.message).toBe(errorMessages.error500);
   });
 });
