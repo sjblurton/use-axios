@@ -18,21 +18,28 @@ export function useAxios<D = any, T = any>(): [
   );
 
   useEffect(() => {
+    let isActive = true;
     const call = async () => {
       if (axiosReq?.url) {
         try {
           setStatus('pending');
           const res: AxiosResponse<T, D> = await axios.request(axiosReq);
-          setAxiosRes(res);
-          setStatus('success');
+          if (isActive) {
+            setAxiosRes(res);
+            setStatus('success');
+          }
         } catch (error) {
-          setStatus('error');
-          setError(error as AxiosError);
+          if (isActive) {
+            setStatus('error');
+            setError(error as AxiosError);
+          }
         }
       }
     };
-
     call();
+    return () => {
+      isActive = false;
+    };
   }, [axiosReq]);
 
   return [status, setAxiosReq, error, axiosRes];

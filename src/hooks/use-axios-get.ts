@@ -5,21 +5,27 @@ import { Status } from '../interfaces';
 
 const getFetcher = (url: string) => axios.get(url).then(res => res.data);
 
-export function useAxiosGet<Data>(
+export function useAxiosGet<D = any>(
   url: string
 ): [
   status: Status,
-  data: Data | undefined,
-  error: AxiosError | undefined,
-  mutate: KeyedMutator<Data>,
+  data: D | undefined,
+  error: AxiosError<D, D> | undefined,
+  mutate: KeyedMutator<D>,
 ] {
   const [status, setStatus] = useState<Status>('idle');
-  const { data, isValidating, mutate, error } = useSWR<Data>(url, getFetcher);
+  const { data, isValidating, mutate, error } = useSWR<D, AxiosError<D>>(url, getFetcher);
 
   useEffect(() => {
-    if ((!data && !error) || isValidating) return setStatus('pending');
-    if (error) return setStatus('error');
-    if (data && !isValidating) return setStatus('success');
+    let isActive = true;
+    if(isActive){
+      if ((!data && !error) || isValidating) return setStatus('pending');
+      if (error) return setStatus('error');
+      if (data && !isValidating) return setStatus('success');
+    }
+        return () => {
+      isActive = false;
+    };
   }, [data, status, isValidating, error]);
 
   return [ status, data, error, mutate ];
