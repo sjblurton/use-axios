@@ -4,9 +4,9 @@ import { AxiosWithMethodAndUrl, Status } from '../interfaces';
 
 export function useAxios<D = any, T = any>(): [
   Status,
-  React.Dispatch<React.SetStateAction<AxiosWithMethodAndUrl<D> | undefined>>,
+  AxiosResponse<T, D> | undefined,
   AxiosError<T, D> | undefined,
-  AxiosResponse<T, D> | undefined
+  React.Dispatch<React.SetStateAction<AxiosWithMethodAndUrl<D> | undefined>>
 ] {
   const [status, setStatus] = useState<Status>('idle');
   const [error, setError] = useState<AxiosError | undefined>(undefined);
@@ -42,5 +42,5 @@ export function useAxios<D = any, T = any>(): [
     };
   }, [axiosReq]);
 
-  return [status, setAxiosReq, error, axiosRes];
+  return [status, axiosRes, error, setAxiosReq];
 }

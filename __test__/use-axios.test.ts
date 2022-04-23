@@ -21,7 +21,7 @@ describe('useAxios hook status testing.', () => {
   it('should return status pending', () => {
     const { result } = renderHook(() => useAxios());
     act(() => {
-      result.current[1]({ method: 'GET', url: urls.users });
+      result.current[3]({ method: 'GET', url: urls.users });
     });
     expect(result.current[0]).toBe('pending');
   });
@@ -29,7 +29,7 @@ describe('useAxios hook status testing.', () => {
   it('should return status success', async () => {
     const { result, waitForNextUpdate } = renderHook(() => useAxios());
     act(() => {
-      result.current[1]({ method: 'GET', url: urls.users });
+      result.current[3]({ method: 'GET', url: urls.users });
     });
     await waitForNextUpdate();
     expect(result.current[0]).toBe('success');
@@ -38,7 +38,7 @@ describe('useAxios hook status testing.', () => {
   it('should return status error', async () => {
     const { result, waitForNextUpdate } = renderHook(() => useAxios());
     act(() => {
-      result.current[1]({ method: 'GET', url: urls.error404 });
+      result.current[3]({ method: 'GET', url: urls.error404 });
     });
     await waitForNextUpdate();
     expect(result.current[0]).toBe('error');
@@ -51,14 +51,14 @@ describe('useAxios hook CREATE testing.', () => {
       useAxios<UserInput, MockUser>()
     );
     act(() => {
-      result.current[1]({
+      result.current[3]({
         method: 'POST',
         url: urls.users,
         data: { name: 'Bob', username: 'Robob' },
       });
     });
     await waitForNextUpdate();
-    expect(result.current[3]?.status).toBe(200);
+    expect(result.current[1]?.status).toBe(200);
   });
 
   it('should post and respond with data input', async () => {
@@ -66,14 +66,14 @@ describe('useAxios hook CREATE testing.', () => {
       useAxios<UserInput, MockUser>()
     );
     act(() => {
-      result.current[1]({
+      result.current[3]({
         method: 'POST',
         url: urls.users,
         data: { name: 'Bob', username: 'Robob' },
       });
     });
     await waitForNextUpdate();
-    expect(result.current[3]?.data?.createdAt).toBe('23/04/2022');
+    expect(result.current[1]?.data?.createdAt).toBe('23/04/2022');
   });
 });
 
@@ -83,7 +83,7 @@ describe('useAxios hook UPDATE testing.', () => {
       useAxios<UserInput, MockUser>()
     );
     act(() => {
-      result.current[1]({
+      result.current[3]({
         method: 'PUT',
         url: urls.editUser,
         params: { id: 3 },
@@ -91,21 +91,21 @@ describe('useAxios hook UPDATE testing.', () => {
       });
     });
     await waitForNextUpdate();
-    expect(result.current[3]?.status).toBe(200);
+    expect(result.current[1]?.status).toBe(200);
   });
   it('should update and respond with data sent.', async () => {
     const { result, waitForNextUpdate } = renderHook(() =>
       useAxios<UserInput, MockUser>()
     );
     act(() => {
-      result.current[1]({
+      result.current[3]({
         method: 'PUT',
         url: urls.editUser,
         data: { name: 'Bob', username: 'Robob' },
       });
     });
     await waitForNextUpdate();
-    expect(result.current[3]?.data.id).toBe(4);
+    expect(result.current[1]?.data.id).toBe(4);
   });
 });
 
@@ -113,10 +113,10 @@ describe('useAxios hook READ testing.', () => {
   it('should return the array of users', async () => {
     const { result, waitForNextUpdate } = renderHook(() => useAxios());
     act(() => {
-      result.current[1]({ method: 'GET', url: urls.users });
+      result.current[3]({ method: 'GET', url: urls.users });
     });
     await waitForNextUpdate();
-    expect(result.current[3]?.data).toEqual(mockUsers);
+    expect(result.current[1]?.data).toEqual(mockUsers);
   });
 });
 
@@ -126,13 +126,13 @@ describe('useAxios hook DELETE testing.', () => {
       useAxios<UserInput, MockUser>()
     );
     act(() => {
-      result.current[1]({
+      result.current[3]({
         method: 'DELETE',
         url: urls.editUser,
       });
     });
     await waitForNextUpdate();
-    expect(result.current[3]?.status).toBe(204);
+    expect(result.current[1]?.status).toBe(204);
   });
 });
 
@@ -140,7 +140,7 @@ describe('useAxios hook data error catching.', () => {
   it('should return an error object', async () => {
     const { result, waitForNextUpdate } = renderHook(() => useAxios());
     act(() => {
-      result.current[1]({ url: urls.error404, method: 'GET' });
+      result.current[3]({ url: urls.error404, method: 'GET' });
     });
     await waitForNextUpdate();
     expect(result.current[2]?.isAxiosError).toBeTruthy();
@@ -148,7 +148,7 @@ describe('useAxios hook data error catching.', () => {
   it('should return an 404 error message', async () => {
     const { result, waitForNextUpdate } = renderHook(() => useAxios());
     act(() => {
-      result.current[1]({ url: urls.error404, method: 'GET' });
+      result.current[3]({ url: urls.error404, method: 'GET' });
     });
     await waitForNextUpdate();
     expect(result.current[2]?.message).toBe(errorMessages.error404);
@@ -156,7 +156,7 @@ describe('useAxios hook data error catching.', () => {
   it('should return an 500 error message', async () => {
     const { result, waitForNextUpdate } = renderHook(() => useAxios());
     act(() => {
-      result.current[1]({ url: urls.error500, method: 'GET' });
+      result.current[3]({ url: urls.error500, method: 'GET' });
     });
     await waitForNextUpdate();
     expect(result.current[2]?.message).toBe(errorMessages.error500);
